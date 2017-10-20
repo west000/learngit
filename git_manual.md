@@ -109,3 +109,25 @@ You can initialize this repository with code from a Subversion, Mercurial, or TF
 - 从这个仓库克隆出新的仓库
 - 把一个已有的本地仓库与之关联，然后把本地仓库的内容推送到github仓库
 - 从其它仓库导入代码到本仓库
+
+2. 将本地仓库与远程仓库进行关联
+```
+$ git remote add origin git@github.com:west000/learngit.git	# 关联远程库origin
+$ git push -u origin master	# 将本地库master分支的所有内容推送到远程库origin的master分支中
+				# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令
+
+$ ...... # 在本地库做一些修改，并提交
+$ git push origin master	# 把本地master分支的最新修改推送到远程库
+```
+上面的origin就是远程库的名字，当然可以改成其他名字，不过远程库默认就是这个名字
+
+# 从远程库克隆
+```sh
+$ mkdir /home/west/learngit_clone
+$ cd /home/west/learngit_clone
+$ git clone git@github.com:west000/learngit.git
+$ cd learngit
+$ ls -a
+$ .  ..  .git  git_manual.md  readme.md
+```
+git支持多种协议，包括https，但是通过ssh支持的原生git协议速度是最快的
