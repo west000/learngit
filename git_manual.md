@@ -121,7 +121,7 @@ $ git push origin master	# 把本地master分支的最新修改推送到远程�
 ```
 上面的origin就是远程库的名字，当然可以改成其他名字，不过远程库默认就是这个名字
 
-# 从远程库克隆
+## 从远程库克隆
 ```sh
 $ mkdir /home/west/learngit_clone
 $ cd /home/west/learngit_clone
@@ -131,3 +131,14 @@ $ ls -a
 $ .  ..  .git  git_manual.md  readme.md
 ```
 git支持多种协议，包括https，但是通过ssh支持的原生git协议速度是最快的
+
+# 分支管理
+## 创建与合并分支
+- 查看分支：git branch
+- 创建分支：git branch <name>
+- 切换分支：git checkout <name>
+- 创建+切换分支：git chechout -b <name>
+- 合并某分支到当前分支：git merge <name>
+- 删除分支：git branch -d <name>
+
+## 解决冲突
