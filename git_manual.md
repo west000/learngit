@@ -142,6 +142,8 @@ git支持多种协议，包括https，但是通过ssh支持的原生git协议速
 - 删除分支：git branch -d <name>
 
 ## 解决冲突
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+
 ```sh
 $ git merge dev 	# 将dev分支合并到当前分支
 			# 如果合并的时候有冲突，会在当前分支的冲突文件中，显示下列内容
@@ -151,5 +153,10 @@ $ git merge dev 	# 将dev分支合并到当前分支
 			# dev分支冲突文件的冲突内容
 			# >>>>>>> dev	# dev分支
 
-# 修改冲突的方式：
+# 修改冲突的方式：在当前的冲突文件中解决冲突，然后在进行git add <file>; git commit -m "conflict fixed";即可。
+# 注意：这样解决冲突，dev分支上的内容是不会改变的！我们合并分支的时候，解决完冲突，往往会删除dev分支或者将dev分支的更新为master分支的最新内容
+```
+合并完分支后，可以使用git log --graph查看分支的合并图
+```sh
+git log --graph --pretty=oneline --abbrev-commit
 ```
