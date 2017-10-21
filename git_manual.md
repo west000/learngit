@@ -160,3 +160,35 @@ $ git merge dev 	# 将dev分支合并到当前分支
 ```sh
 git log --graph --pretty=oneline --abbrev-commit
 ```
+
+## 分支管理策略
+实际开发中，不会直接在master进行开发。master分支应该是非常稳定的，仅仅用来发布新版本，平时不能在上面干活。通常情况下，会在远程仓库新创建一个dev分支，在dev分支上干活，等到要发布版本的时候，再将dev分支合并到master分支上。每个人都在dev上干活，并且每个人都有自己的分支，时不时往dev上合并。
+
+默认情况下，git merge dev使用fast forward的方式进行合并，这种形式只是简单调整指针而已，因此速度很快，但是合并分支之后，如果我们删除掉dev分支，在这种模式下dev分支的信息将丢失。
+为了避免这个问题，可以在合并时使用`--no-ff`禁用fast forward模式，这时git会生成一个新的commit，这样从历史上就可以看到dev分支信息（即使我们删除了dev）
+
+```sh
+$ git merge --no-ff -m "merge with no-ff" dev	# 使用--no-ff会产生一次commit，因此需要加上-m提供提交信息
+$ git branch -d dev					# 现在即使删除了dev分支
+$ git log --graph --pretty=oneline --abbrev-commit	# 仍然能够查看到dev分支的历史
+```
+
+## Bug分支
+修复bug时，可以通过创建新的bug分支(命名如issue-101), 进行修复，然后合并，最后删除；
+当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
+
+```sh
+$ git stash			# 保存当前工作区
+$ git stash list		# 查看工作区保存的位置
+$ git stash pop			# 恢复最新保存的工作区，并将其从stash中删除
+$ git stash apply [stash@{0}]	# 恢复指定的工作区，默认是最新保存的工作区
+$ git stash drop [stash@{0}]	# 删除指定的工作区，默认是最新保存的工作区
+```
+
+## Feature分支
+开发一个新feature，最好新建一个分支(命名如feature-101)
+如果要丢弃一个没有被合并过的分支，如果使用git branch -d <name>将会报错，此时可以通过git branch -D <name>强行删除。
+
+## 多人协作
+
+
