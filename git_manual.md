@@ -1,13 +1,13 @@
 # git的基本操作
 ## 安装git
-```
+```sh
 $ sudo yum install git
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 ```
 
 ## 创建版本库
-```
+```sh
 $ mkdir learngit
 $ cd learngit
 $ git init	# 初始化一个git仓库
@@ -18,7 +18,7 @@ $ ls -a
 ```
 
 ## 添加文件到git仓库
-```
+```sh
 $ vim readme.md
 $ vim git_manual.md
 $ git add readme.md git_manual.md 	# 一次性添加多个文件
@@ -26,7 +26,7 @@ $ git commit -m "add file"		# 提交
 ```
 
 ## 版本回退
-```
+```sh
 $ git reset --hard HEAD^	# 回退到上一个版本
 $ git reset --hard HEAD^^	# 回退到上上个版本
 $ git reset --hard HEAD~100	# 回退到前100个版本
@@ -38,7 +38,7 @@ $ git reflog	# 查看命令的历史，以便确定回退到未来哪个版本
 ```
 
 ## 工作区和暂存区
-```
+```sh
 $ git add readme.md		# git add 将文件的修改从工作区添加到暂存区中
 $ git commit 			# git commit 将暂存区的内容提交到当前分支
 $ git reset HEAD file		# 把暂存区中的修改撤销掉(unstage)，重新放回工作区，这里使用HEAD表示最新版本
@@ -46,7 +46,7 @@ $ git reset HEAD file		# 把暂存区中的修改撤销掉(unstage)，重新放�
 ```
 
 ## 撤销修改
-```
+```sh
 $ git checkout -- readme.md	# 将readme.md在工作区的修改全部撤销，这里有两种情况
 				# readme.md自修改后还没有放到暂存区中，现在撤销修改就回到和版本库一样的状态
 				# readme.md已经加入暂存区了，然后又被修改，现在撤销修改就回到添加到暂存区后的状态
@@ -59,7 +59,7 @@ $ git reset --hard HEAD^	# 如果已经将暂存区的内容提交到当前分�
 ```
 
 ## 删除文件
-```
+```sh
 $ vim test
 $ git add test	# 将test添加到暂存区中
 $ rm test	# 删除工作区的test
@@ -111,10 +111,13 @@ You can initialize this repository with code from a Subversion, Mercurial, or TF
 - 从其它仓库导入代码到本仓库
 
 2. 将本地仓库与远程仓库进行关联
-```
+```sh
 $ git remote add origin git@github.com:west000/learngit.git	# 关联远程库origin
 $ git push -u origin master	# 将本地库master分支的所有内容推送到远程库origin的master分支中
-				# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令
+				# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，
+				# Git不但会把本地的master分支内容推送的远程新的master分支，
+				# 还会把本地的master分支和远程的master分支关联起来，
+				# 这样在以后的推送或者拉取时就可以简化命令
 
 $ ...... # 在本地库做一些修改，并提交
 $ git push origin master	# 把本地master分支的最新修改推送到远程库
@@ -153,10 +156,10 @@ $ git merge dev 	# 将dev分支合并到当前分支
 			# dev分支冲突文件的冲突内容
 			# >>>>>>> dev	# dev分支
 
-# 修改冲突的方式：在当前的冲突文件中解决冲突，然后在进行git add <file>; git commit -m "conflict fixed";即可。
+# 修改冲突的方式：在当前的冲突文件中解决冲突，然后在进行`git add <file>; git commit -m "conflict fixed"`即可。
 # 注意：这样解决冲突，dev分支上的内容是不会改变的！我们合并分支的时候，解决完冲突，往往会删除dev分支或者将dev分支的更新为master分支的最新内容
 ```
-合并完分支后，可以使用git log --graph查看分支的合并图
+合并完分支后，可以使用`git log --graph`查看分支的合并图
 ```sh
 git log --graph --pretty=oneline --abbrev-commit
 ```
@@ -164,8 +167,8 @@ git log --graph --pretty=oneline --abbrev-commit
 ## 分支管理策略
 实际开发中，不会直接在master进行开发。master分支应该是非常稳定的，仅仅用来发布新版本，平时不能在上面干活。通常情况下，会在远程仓库新创建一个dev分支，在dev分支上干活，等到要发布版本的时候，再将dev分支合并到master分支上。每个人都在dev上干活，并且每个人都有自己的分支，时不时往dev上合并。
 
-默认情况下，git merge dev使用fast forward的方式进行合并，这种形式只是简单调整指针而已，因此速度很快，但是合并分支之后，如果我们删除掉dev分支，在这种模式下dev分支的信息将丢失。
-为了避免这个问题，可以在合并时使用`--no-ff`禁用fast forward模式，这时git会生成一个新的commit，这样从历史上就可以看到dev分支信息（即使我们删除了dev）
+默认情况下，`git merge dev`使用`fast forward`的方式进行合并，这种形式只是简单调整指针而已，因此速度很快，但是合并分支之后，如果我们删除掉dev分支，在这种模式下dev分支的信息将丢失。
+为了避免这个问题，可以在合并时使用`--no-ff`禁用`fast forward`模式，这时git会生成一个新的commit，这样从历史上就可以看到dev分支信息（即使我们删除了dev）
 
 ```sh
 $ git merge --no-ff -m "merge with no-ff" dev	# 使用--no-ff会产生一次commit，因此需要加上-m提供提交信息
@@ -175,7 +178,7 @@ $ git log --graph --pretty=oneline --abbrev-commit	# 仍然能够查看到dev分
 
 ## Bug分支
 修复bug时，可以通过创建新的bug分支(命名如issue-101), 进行修复，然后合并，最后删除；
-当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，再git stash pop，回到工作现场。
+当手头工作没有完成时，先把工作现场`git stash`一下，然后去修复bug，修复后，再`git stash pop`，回到工作现场。
 
 ```sh
 $ git stash			# 保存当前工作区
@@ -187,7 +190,7 @@ $ git stash drop [stash@{0}]	# 删除指定的工作区，默认是最新保存�
 
 ## Feature分支
 开发一个新feature，最好新建一个分支(命名如feature-101)
-如果要丢弃一个没有被合并过的分支，如果使用git branch -d <name>将会报错，此时可以通过git branch -D <name>强行删除。
+如果要丢弃一个没有被合并过的分支，如果使用`git branch -d <name>`将会报错，此时可以通过`git branch -D <name>`强行删除。
 
 ## 多人协作
 多人协作的工作模式通常如下：
@@ -273,7 +276,7 @@ $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Cre
 ```
 
 值得注意的：
-- 配置git的时候，加上--global是针对当前用户起作用的，如果不加，则只针对当前的仓库起作用
+- 配置git的时候，加上`--global`是针对当前用户起作用的，如果不加，则只针对当前的仓库起作用
 - 每个仓库的git配置文件放在.git/config文件中
 - 当前用户的git配置文件则放在用户主目录中的.gitconfig文件中
 - 如果要删除别名，则可以在对应的配置文件中直接删除
@@ -283,7 +286,7 @@ $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Cre
 
 # 常见问题
 ## git签出远程分支问题
-```
+```sh
 $ git checkout -b dev origin/dev	# 创建dev分支，并关联远程分支
 $ git checkout --track origin/dev	# 已存在的本地分支进行关联
 ```
