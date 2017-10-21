@@ -190,5 +190,83 @@ $ git stash drop [stash@{0}]	# 删除指定的工作区，默认是最新保存�
 如果要丢弃一个没有被合并过的分支，如果使用git branch -d <name>将会报错，此时可以通过git branch -D <name>强行删除。
 
 ## 多人协作
+多人协作的工作模式通常如下：
+- 首先，可以试图用`git push origin branch-name`推送自己的修改；
+- 如果推送失败，则因为远程分支比本地分支更加新，需要先用`git pull`拉取远程分支，并试图与本地分支合并；
+- 如果合并有冲突，则解决冲突，并在本地提交；
+- 没有冲突或者解决掉冲突后，再用`git push origin branch-name`推送就能成功
+
+值得注意的：如果`git pull`提示“no tracking information for the current branch”，则说明本地分支和远程分支的链接关系没有创建，用命令`git pull <remote> <branch>`指明拉取的远程分支，或在当前分支使用`git branch --set-upstream-to=origin/<branch-name> current-branch`与远程分支建立链接。
+
+```sh
+$ git remote		# 查看远程库名称
+$ git remote -v		# 查看远程库详细信息，显示可以抓取和推送的远程库的地址
+
+$ git push origin branch-name	# 将本地分支推送到远程分支
+				# 如果没有对应的远程分支，则会在远程库创建之
+				# 如果有对应的远程分支，且推送失败，则先git pull拉取关联的远程分支，与本地分支进行合并
+
+$ git pull			# 拉取关联的远程分支
+$ git pull origin branch-name	# 拉取指定的远程分支  
+
+$ git checkout -b branch-name origin/branch-name # 在本地创建和远程分支对应的分支, 并进行关联
+
+# 下面的两步与上一条命令效果一致
+$ git checkout -b branch-name 	# 在本地创建分支
+$ git branch --set-upstream-to=origin/<branch-name> current-branch-name # 建立关联 
+```
+
+# 标签管理
+标签可以看做是对commit-id的易记标识，默认只存储在本地，不会自动推送到远程
+
+## 创建标签
+```sh
+$ git tag <name> [commit-id]			# 创建一个标签name，commit-id默认为HEAD
+$ git tag -a <name> -m "some message"		# 创建一个标签，并指定标签信息
+$ git tag -s <name> -m "some message"		# 创建一个标签，指定标签信息，并使用PGP签名标签信息
+$ git tag					# 查看所有标签
+```
+
+## 操作标签
+```sh
+$ git push origin <tagname>	# 标签默认只存储在本地，使用该命令可以将指定标签推送到远程库
+$ git push origin --tags	# 推送所有未推送的标签到远程库
+$ git tag -d <tagname>          # 在本地删除一个标签
+$ git push origin :refs/tags/<tagname>	# 在远程库删除一个标签
+
+$ git tag v0.1			
+$ git push origin v0.1			# 将标签v0.1推送到远程库
+$ git tag -d v0.1			# 在本地删除标签v0.1
+$ git push origin :refs/tags/v0.1	# 想要删除远程库的标签，须使用该命令
+```
+
+# 自定义git
+git提供了许多配置项，可以根据喜好进行定制
+
+## 忽略特殊文件
+```
+
+```
+
+## 配置别名
 
 
+## 搭建git服务器
+
+
+# 常见问题
+## git签出远程分支问题
+```
+$ git checkout -b dev origin/dev	# 创建dev分支，并关联远程分支
+$ git checkout --track origin/dev	# 已存在的本地分支进行关联
+```
+如果出现错误
+```sh
+fatal: Cannot update paths and switch to branch 'dev' at the same time.  
+Did you intend to checkout 'origin/dev' which can not be resolved as commit?  
+```
+可以采用：
+```sh
+$ git fetch
+$ git checkout -b dev origin/dev
+```
