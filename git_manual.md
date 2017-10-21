@@ -244,12 +244,39 @@ $ git push origin :refs/tags/v0.1	# 想要删除远程库的标签，须使用�
 git提供了许多配置项，可以根据喜好进行定制
 
 ## 忽略特殊文件
+```sh
+$ vim .gitignore	# 创建.gitignore文件，并加入一些过滤规则，如*.txt
+$ git add .gitignore	# 必须将.gitignore文件加入到版本库
+$ git commit -m "add .gitignore"
+
+$ git add hello.txt	# 由于.gitignore文件中有*.txt的过滤规则，因此该文件无法加入版本库
+$ git add -f hello.txt	# 若要强制加入，添加-f选项
+$ git check-ignore -v hello.txt		# 查看那个过滤规则阻止了hello.txt的加入
+.gitignore:1:*.txt      hello.txt	# 原来是第一条规则阻止了
 ```
 
-```
+忽略文件的常用原则如下：
+- 忽略操作系统自动生成的文件，比如缩略图等
+- 忽略编译生成的中间文件、可执行文件等
+- 忽略带有敏感信息的配置文件，比如存放口令的配置文件
 
 ## 配置别名
+```sh
+$ git config --global alias.st status	# 为status创建别名st
+$ git config --global alias.br branch
+$ git config --global alias.co checkout
+$ git config --global alias.ci commit
 
+$ git config --global alias.unstage 'reset HEAD'	# 将暂存区的修改撤销掉，重新放回工作区
+$ git config --global alias.last 'log -1'	# 显示最后一次提交信息
+$ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+```
+
+值得注意的：
+- 配置git的时候，加上--global是针对当前用户起作用的，如果不加，则只针对当前的仓库起作用
+- 每个仓库的git配置文件放在.git/config文件中
+- 当前用户的git配置文件则放在用户主目录中的.gitconfig文件中
+- 如果要删除别名，则可以在对应的配置文件中直接删除
 
 ## 搭建git服务器
 
