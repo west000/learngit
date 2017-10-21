@@ -300,3 +300,37 @@ Did you intend to checkout 'origin/dev' which can not be resolved as commit?
 $ git fetch
 $ git checkout -b dev origin/dev
 ```
+
+## 想要忽略项目中的所有可执行文件
+Linux中，可执行文件（ELF格式）没有后缀名，想要忽略项目中的所有可执行文件，有几种解决方案：
+- 开源项目的常见做法：将所有编译生成的文件（包括可执行文件和中间步骤的目标文件等），都放在build目录下，然后在.gitignore中忽略整个build目录
+
+- 将所有可执行文件的文件名罗列出来，放在.gitignore中（不推荐）
+```sh
+$ find 目录名 -type f -exec file {} + | grep "ELF*" | sed 's/^.\///g' | awk '{print $1}' | sed 's/://g' >> .gitignore
+# 把目录名中的ELF文件追加到.gitignore中
+```
+
+- 先把所有文件和目录忽略 -> 再把直接要管理的目录和子目录加进去 -> 接着增加需要管理的文件类型（一般用扩展名） -> 最后把一些特殊的文件处理一下
+整个.gitignore文件的内容大致如下：
+```sh
+#忽略所有文件和目录
+*
+
+#增加指定目录和下面所有目录
+!/dir1/
+!/dir1/**/
+!/dir2/
+!/dir2/**/
+
+#增加指定扩展名文件和Makefile文件
+!*.cpp
+!*.c
+!*.h
+!Makefile
+
+#忽略特殊文件，一般是当前目录下的文件(当前目录不能忽略)
+/source.cpp
+/source.h
+```
+
