@@ -1,0 +1,9 @@
+this is a test in dev:
+now, i have to repair a bug in master
+but i have not finished my work in dev, so i don't want to commit 'test' now
+in fact, i will create a new branch named issue-101 to repair this bug in master
+before this, i should use 'git stash' to store my unfinished work-placestation in dev
+when i repair bug in issue-101, i will merge issue-101 to master firstly, then switch to dev and use 'git stash list' to show all of the stashs, in this moment, i have two ways to continue: a. git stash apply -> git status drop; b. git stash pop; and now, the unfinished work-placestation in dev restore.
+
+ok, now i fix up the bug in issue-101, and i also delete issue-101
+so i will switch to dev, and restore the stash, continue to finish my work in dev
