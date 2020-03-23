@@ -273,6 +273,7 @@ $ git config --global alias.ci commit
 $ git config --global alias.unstage 'reset HEAD'	# 将暂存区的修改撤销掉，重新放回工作区
 $ git config --global alias.last 'log -1'	# 显示最后一次提交信息
 $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+$ git config --global core.quotepath false # 解决git status不能显示中文的问题 
 ```
 
 值得注意的：
